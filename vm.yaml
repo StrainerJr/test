@@ -1,15 +1,11 @@
 ---
 - name: Add CD/DVD device to VM
-  hosts: localhost
+  hosts: vms
   gather_facts: no
   collections:
     - vmware.vmware_rest
-
-  vars:
-    vcenter_hostname: "your_vcenter_hostname"
-    vcenter_username: "your_vcenter_username"
-    vcenter_password: "your_vcenter_password"
-    vm_name: "your_vm_name"
+  vars_files:
+    - vars.yml
 
   tasks:
     - name: Get VM ID
