@@ -1,0 +1,42 @@
+---
+- name: Add CD/DVD device to VM
+  hosts: localhost
+  gather_facts: no
+  collections:
+    - vmware.vmware_rest
+
+  vars:
+    vcenter_hostname: "your_vcenter_hostname"
+    vcenter_username: "your_vcenter_username"
+    vcenter_password: "your_vcenter_password"
+    vm_name: "your_vm_name"
+
+  tasks:
+    - name: Get VM ID
+      vcenter_vm_info:
+        vcenter_hostname: "{{ vcenter_hostname }}"
+        vcenter_username: "{{ vcenter_username }}"
+        vcenter_password: "{{ vcenter_password }}"
+        vcenter_validate_certs: no
+        names:
+          - "{{ vm_name }}"
+      register: vm_info
+
+    - name: Add CD/DVD device to VM
+      vcenter_vm_hardware_cdrom:
+        vcenter_hostname: "{{ vcenter_hostname }}"
+        vcenter_username: "{{ vcenter_username }}"
+        vcenter_password: "{{ vcenter_password }}"
+        vcenter_validate_certs: no
+        vm: "{{ vm_info.value[0].vm }}"
+        state: present
+        type: SATA
+        backing:
+          type: CLIENT_DEVICE
+        start_connected: true
+        allow_guest_control: true
+      register: cdrom_result
+
+    - name: Display result
+      debug:
+        var: cdrom_result
