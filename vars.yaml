@@ -1,0 +1,5 @@
+---
+vcenter_hostname: "your_vcenter_hostname"
+vcenter_username: "your_vcenter_username"
+vcenter_password: "your_vcenter_password"
+vm_name: "your_vm_name"
